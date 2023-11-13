@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+ReadKey() {
+  if read -sN1 KEY; then
+    while read -sN1 -t 0.001 ; do
+      KEY+="${REPLY}"
+    done
+  fi
+}
+
+while ReadKey; do
+  case "${KEY}" in
+    $'\e[17~') $(/usr/bin/xbacklight -dec 10) && echo $(/usr/bin/xbacklight -get) && $(pkill -RTMIN+11 dwmblocks);;
+    $'\e[18~') $(/usr/bin/xbacklight -inc 10) && echo $(/usr/bin/xbacklight -get) && $(pkill -RTMIN+11 dwmblocks);;
+    q|Q) echo "exiting..." && exit 1;;
+  esac
+done
+

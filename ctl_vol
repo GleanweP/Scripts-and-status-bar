@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ReadKey() {
+  if read -sN1 KEY; then
+    while read -sN1 -t 0.001 ; do
+      KEY+="${REPLY}"
+    done
+  fi
+}
+
+while ReadKey; do
+  case "${KEY}" in
+	  $'\e[19~') $(wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-) && echo $(wpctl get-volume @DEFAULT_AUDIO_SINK@) && $(pkill -RTMIN+10 dwmblocks);;
+	  $'\e[20~') $(wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+) && echo $(wpctl get-volume @DEFAULT_AUDIO_SINK@) && $(pkill -RTMIN+10 dwmblocks);;
+	  $'\eOR') $(wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle) && echo $(wpctl get-volume @DEFAULT_AUDIO_SINK@) && $(pkill -RTMIN+10 dwmblocks);;
+    q|Q) echo "exiting..." && exit 1;;
+  esac
+done

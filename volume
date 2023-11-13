@@ -1,0 +1,16 @@
+#!/bin/bash
+ARRAY=()
+CURRENT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+split=$(echo $CURRENT | tr " " "\n")
+for mots in $split; do
+	ARRAY+=($mots)
+done
+VOLUME=${ARRAY[1]}
+ISMUTED=${ARRAY[2]}
+OP=$(echo "$VOLUME * 100" | bc)
+int=$(printf "%.0f\n" "$OP")
+if [[ "$ISMUTED" == "[MUTED]" ]]; then
+	printf "\xf3\xb0\x9d\x9f MUTED";
+else
+	printf "\xef\x80\xa8 %2d%%" "$int";
+fi

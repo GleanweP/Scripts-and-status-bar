@@ -1,0 +1,4 @@
+#!/bin/bash
+CURRENT=$(/usr/bin/xbacklight -get)
+LIGHT=${CURRENT%.*}
+printf "\xee\x8c\x8d %d%%" $LIGHT
