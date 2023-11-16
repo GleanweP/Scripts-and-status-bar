@@ -10,7 +10,7 @@ ISMUTED=${ARRAY[2]}
 OP=$(echo "$VOLUME * 100" | bc)
 int=$(printf "%.0f\n" "$OP")
 if [[ "$ISMUTED" == "[MUTED]" ]]; then
-	printf "\xf3\xb0\x9d\x9f MUTED";
+	printf " 󰖁 MUTED";
 else
-	printf "\xef\x80\xa8 %2d%%" "$int";
+	printf " 󰕾  %2d%%" "$int";
 fi

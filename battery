@@ -2,15 +2,13 @@
 CAPACITY=$(cat /sys/class/power_supply/CMB1/capacity)
 CURRENT=$(cat /sys/class/power_supply/CMB1/status)
 case "$CURRENT" in 
-	"Charging") printf "\xef\x83\xa7 %d%%" $CAPACITY;;
+	"Charging") echo "󰂄 $CAPACITY%";;
         "Discharging")
-		if [[ "$CAPACITY" -gt 75 ]]; then 
-			printf "\xef\x89\x80 %d%%" $CAPACITY
-		elif [[ "$CAPACITY" -gt 50 ]]; then
-			printf "\xef\x89\x81 %d%%" $CAPACITY
-		elif [[ "$CAPACITY" -gt 25 ]]; then
-			printf "\xef\x89\x82 %d%%" $CAPACITY
-		elif [[ "$CAPACITY" -gt 0 ]]; then  
-			printf "\xef\x89\x83 %d%%" $CAPACITY
-		fi;;
+		case "$CAPACITY" in 
+			100|9[0-9]|8[0-9]) echo "  $CAPACITY%";;
+			7[0-9]|6[0-9])     echo "  $CAPACITY%";;
+			5[0-9]|4[0-9])     echo "  $CAPACITY%";;
+			3[0-9]|2[0-9])     echo "  $CAPACITY%";;
+			*)		   echo "  $CAPACITY%";;
+		esac
 esac

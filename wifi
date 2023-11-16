@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$(cat /sys/class/net/wlp2s0/operstate)" = 'up' ]; then
+	wifi="$(awk '/^\s*w/ { print  int($3 * 100/70) }'  /proc/net/wireless)"
+	case $wifi in
+		100|9[0-9]|8[0-9]) echo " 󰤨 " && $(pkill -RTMIN+12 dwmblocks);;
+		7[0-9]|6[0-9])     echo " 󰤥 " && $(pkill -RTMIN+12 dwmblocks);;
+		5[0-9]|4[0-9])	   echo " 󰤢 " && $(pkill -RTMIN+12 dwmblocks);;
+		3[0-9]|2[0-9])     echo " 󰤟 " && $(pkill -RTMIN+12 dwmblocks);;
+		*)		   echo " 󰤯 " && $(pkill -RTMIN+12 dwmblocks);;
+	esac	
+else
+	echo " 󰤮 " && $(pkill -RTMIN+12 dwmblocks)
+fi

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+dayanddate () {
+	date '+%A %d %b %Y'
+}
+
+timedate () {
+	date '+%H:%M'
+}
+
+while :
+do
+	xsetroot -name "$(dayanddate)"";""$(timedate)"" $(wifi) ""$(backlight) "" $(battery)"
+	sleep 1
+done
