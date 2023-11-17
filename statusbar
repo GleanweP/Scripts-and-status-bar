@@ -1,15 +1,63 @@
-#!/bin/sh
+#!/bin/bash
 
-dayanddate () {
-	date '+%A %d %b %Y'
+printf "$$" > ~/.cache/statusid
+sec=0
+
+# MODULES
+update_date () { 
+	date="$(date "+%A %d %b %Y")" 
 }
 
-timedate () {
-	date '+%H:%M'
+update_time () {
+	time="$(date "+%H:%M")"
 }
 
-while :
+update_bat () { 
+	bat=$(battery)
+}
+
+update_vol () { 
+	vol=$(volume)
+}
+
+update_backlight () { 
+	light=$(backlight)
+}
+
+update_wifi () {
+	internet=$(wifi)
+}
+
+# modules that don't update on their own need to be run at the start for getting their initial value
+update_vol
+update_backlight
+
+display () { 
+	xsetroot -name "$date ; $time $internet $vol $light $bat"
+}
+
+# SIGNALLING
+# trap	"<function>;display"		"RTMIN+n"
+trap	"update_vol;display"		"RTMIN+10"
+trap	"update_backlight;display" 	"RTMIN+11"
+# to update it from external commands
+## kill -m "$(cat ~/.cache/pidofbar)"
+# where m = 34 + n
+
+while true
 do
-	xsetroot -name "$(dayanddate)"";""$(timedate)"" $(wifi) ""$(backlight) "" $(battery)"
-	sleep 1
-done
+	sleep 1 & wait && { 
+		# to update item ever n seconds with a offset of m
+		[ $((sec % 60 )) -eq 0 ] && update_time 	# update time every 5 seconds
+		[ $((sec % 3600 )) -eq 0 ] && update_date 	
+		[ $((sec % 60)) -eq 0 ] && update_bat
+		[ $((sec % 60)) -eq 0 ] && update_wifi
+
+		# how often the display updates ( 5 seconds )
+		[ $((sec % 5 )) -eq 0 ] && display
+		sec=$((sec + 1))
+	}
+done 
+
+
+

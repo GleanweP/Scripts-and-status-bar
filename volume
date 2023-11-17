@@ -12,5 +12,5 @@ int=$(printf "%.0f\n" "$OP")
 if [[ "$ISMUTED" == "[MUTED]" ]]; then
 	printf " 󰖁 MUTED";
 else
-	printf " 󰕾  %2d%%" "$int";
+	printf " 󰕾 %2d%%" "$int";
 fi
