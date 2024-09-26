@@ -33,7 +33,7 @@ update_vol
 update_backlight
 
 display () { 
-	xsetroot -name "$date ; $time $internet $vol $light $bat"
+	xsetroot -name "$date ; $time $internet $vol $light $bat"	# ";" is used to split the status in two parts (ref. splitstatus patch)
 }
 
 # SIGNALLING
@@ -41,7 +41,7 @@ display () {
 trap	"update_vol;display"		"RTMIN+10"
 trap	"update_backlight;display" 	"RTMIN+11"
 # to update it from external commands
-## kill -m "$(cat ~/.cache/pidofbar)"
+## kill -m "$(cat ~/.cache/statusid)"
 # where m = 34 + n
 
 while true
@@ -58,6 +58,3 @@ do
 		sec=$((sec + 1))
 	}
 done 
-
-
-
